@@ -1,0 +1,19 @@
+module nerve_path
+
+class Nerve_path
+static create(points)
+	points�� interpolation�ϴ� ���� 3�� B-spline�� ��Ÿ���� Nerve_path�� �����.
+get_appr_len()
+get_pos(u)
+	�Ű� ���� u�� �ش��ϴ� ���� �����ش�. (0 ? u ? 1)
+get_diff1(u)
+	�Ű� ���� u�� �ش��ϴ� �������� 1�� �̺а��� �����ش�. (0 ? u ? 1)
+get_curvature(l)
+	(curve�� ����)?l�� �ش��ϴ� �������� curvature�� �����ش�. (0 ? l ? 1)
+get_torsion(l)
+	(curve�� ����)?l�� �ش��ϴ� �������� torsion�� �����ش�. (0 ? l ? 1)
+length_to_parameter(l)
+	(curve�� ����)?l�� �ش��ϴ� ���� �����ϴ� �Ű����� u�� �����ش�. (0 ? l ? 1)
+parameter_to_length (u)
+	�Ű����� u�� �ش��ϴ� ���� �����ϴ� l�� �����ش�. (0 ? l ? 1)
+

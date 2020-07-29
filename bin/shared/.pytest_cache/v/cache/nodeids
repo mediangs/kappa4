@@ -1,0 +1,15 @@
+[
+  "v3d.py::test",
+  "v3d.py::test_export_wrl",
+  "v3d.py::test_export_3js_facets",
+  "dist_util.py::test2",
+  "dist_util.py::test",
+  "geom.py::test",
+  "extract_intersect_points_from_model.py::test",
+  "geom.py::test2",
+  "extract_intersect_points_from_model.py::test_segment",
+  "extract_intersect_points_from_model.py::test2",
+  "area_shapely.py::test",
+  "rotate.py::test",
+  "rotate.py::test2"
+]

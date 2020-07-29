@@ -1,0 +1,8 @@
+{
+  "extract_intersect_points_from_model.py::test": true,
+  "extract_intersect_points_from_model.py::test_segment": true,
+  "geom.py::test": true,
+  "rotate.py::test2": true,
+  "v3d.py::test_export_3js_facets": true,
+  "v3d.py::test_export_wrl": true
+}
