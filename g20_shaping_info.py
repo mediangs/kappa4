@@ -5,7 +5,7 @@ from datatable_column_definition import column_definition_multicanal_extended as
 _dataset = [{'name': 'Hero', 'dir': './rendered_json/g20.shaping/output-hero-sound-new/'},
             {'name': 'Hero-centroid', 'dir': './rendered_json/g20.shaping/output-hero-sound-cog/'},
             {'name': 'Shaper', 'dir': './rendered_json/g20.shaping/output-shaper-sound-new/'},
-            # {'name': 'Shaper-centroid', 'dir': './rendered_json/g20.shaping/output-shaper-sound-cog/'},
+            {'name': 'Shaper-centroid', 'dir': './rendered_json/g20.shaping/output-shaper-sound-cog/'},
             ]
 
 chart_list = [{'checkbox_argument': ['Mindist chart', True],
