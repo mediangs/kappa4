@@ -46,6 +46,7 @@ from specimen_info_builder import fill_uninstrumented_specimen
 
 # =====================================================
 
+
 def get_meta_info():
     meta_info = {}
     meta_info['magnification_ratio'] = 1
@@ -774,7 +775,6 @@ def get_specimen_infos():
     specimen_info['canals'].append({'name':'pre-db', 'furcation_pos':0.0, 'is_buccal_side':True, 'pts_canal': pre_db, 'pts_vector': bl_vector})
     specimen_info['canals'].append({'name':'pre-p', 'furcation_pos':0.0, 'is_buccal_side':False, 'pts_canal': pre_p, 'pts_vector': bl_vector})
     infos.append(specimen_info)
-
 
     return infos
 
