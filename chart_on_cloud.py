@@ -27,7 +27,7 @@ def main():
 
     st.sidebar.subheader('Dataset')
     directory, files, dataset_name = get_directory_and_files()
-    selected_file = st.sidebar.selectbox('Select model', files, format_func=pretty_filename)
+    selected_file = st.sidebar.selectbox('Select model', sorted(files), format_func=pretty_filename)
     if (selected_file+dataset_name) != ss.data_file+ss.dataset_name:
         ss.model_data = sh.load_model_data(directory + selected_file)
         ss.data_table = sh.processed_datatable(ss.model_data, column_definition)

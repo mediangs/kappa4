@@ -34,6 +34,13 @@ chart_list = [{'checkbox_argument': ['Mindist chart', True],
               ]
 
 
+def pretty_filename(name):
+    s = name.split('.')[1]
+    if not ('mb' in s or 'ml' in s):
+        s = name.split('.')[1] + '.' + name.split('.')[2]
+    return s
+
+
 def config_chart_parameters():
     from class_parameter import DrawOptionParameters
     param = DrawOptionParameters()
@@ -56,13 +63,6 @@ def config_chart_parameters():
     return param
 
 
-def pretty_filename(name):
-    s = name.split('.')[1]
-    if not ('mb' in s or 'ml' in s):
-        s = name.split('.')[1] + '.' + name.split('.')[2]
-    return s
-
-
 def get_directory_and_files():
     from os import listdir
     from os.path import isfile, join
@@ -70,7 +70,6 @@ def get_directory_and_files():
 
     dataset_name = st.sidebar.selectbox('', [x['name'] for x in _dataset])
     directory = next((item['dir'] for item in _dataset if item["name"] == dataset_name), None)
-
     return directory, [f for f in listdir(directory) if isfile(join(directory, f))], dataset_name
 
 
