@@ -6,6 +6,7 @@ sys.path.insert(2, './bin/shared')
 import streamlit_helper as sh
 import canal_and_body_shape as cbs
 from g20_shaping_info import get_dataset_info
+# from tooth_model_info import get_dataset_info
 
 
 def main():

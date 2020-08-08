@@ -34,10 +34,17 @@ def get_circle_around_point(center, tangent_vector, radius, magnification_ratio=
 
 
 def section_outlines_from_vertices(point, normal_vector, facets, normals, is_canal, magnification_ratio):
+
     contours_with_neighbors = scattered_section_contour_from_facets(point, normal_vector, facets, normals,
                                                                     magnification_ratio)  # voxel search range는 default 값사용함
 
-    segments = ordered_outlines_from_contour_points(contours_with_neighbors)
+    # print(f'{contours_with_neighbors=}')
+
+    if len(contours_with_neighbors) == 0:
+        print('empty points')
+        return [[]], [], False
+
+    segments = ordered_outlines_from_contour_points(contours_with_neighbors, closing_distance_limit=3.5*magnification_ratio)
     segments = sorted(segments, key=lambda x: -len(x))
     major_segment = find_major_segment(point, deepcopy(segments))
 

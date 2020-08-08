@@ -465,8 +465,9 @@ class SectionData(object):
         """
 
         #결과값을 vector로 변환해야 None type check 시 문제가 없음
-        self.pt_cnl_ref_centroid = vector(outline_centroid(self.pt_at_crv_ref, self.t_vector_at_crv_ref,
-                                                           self.cnl_ref_major_outline))
+        if self.cnl_ref_major_outline_exist:
+            self.pt_cnl_ref_centroid = vector(
+                outline_centroid(self.pt_at_crv_ref, self.t_vector_at_crv_ref, self.cnl_ref_major_outline))
 
         for k, pt_at_crv_cmp in self.pt_at_crvs_cmp.items() or {}:
             if pt_at_crv_cmp:
@@ -539,10 +540,10 @@ class SectionData(object):
 
 
     def set_canals_dimension_info(self):
-
-        self.cnl_ref_narrow, self.cnl_ref_wide = du.shortest_and_longest_diameter_of_canal(
-            self.pt_at_crv_ref, self.major_axis_vector,
-            self.major_axis_t_vector, self.cnl_ref_major_outline, step_angle=1)
+        if self.cnl_ref_major_outline_exist:
+            self.cnl_ref_narrow, self.cnl_ref_wide = du.shortest_and_longest_diameter_of_canal(
+                self.pt_at_crv_ref, self.major_axis_vector,
+                self.major_axis_t_vector, self.cnl_ref_major_outline, step_angle=1)
 
         for k, pt_at_crv_cmp in self.pt_at_crvs_cmp.items() or {}:
             if pt_at_crv_cmp:
@@ -629,19 +630,20 @@ class SectionData(object):
 
     def set_dist_info(self):
 
-        self.lateral_ref = self.determine_dist_intersection_vertexes(
-            180, self.pt_at_crv_ref, self.cnl_ref_major_outline)
+        if self.cnl_ref_major_outline_exist:
+            self.lateral_ref = self.determine_dist_intersection_vertexes(
+                180, self.pt_at_crv_ref, self.cnl_ref_major_outline)
 
-        self.counter_lateral_ref = self.determine_dist_intersection_vertexes(
-            0, self.pt_at_crv_ref, self.cnl_ref_major_outline)
+            self.counter_lateral_ref = self.determine_dist_intersection_vertexes(
+                0, self.pt_at_crv_ref, self.cnl_ref_major_outline)
 
-        self.mesial_ref = self.determine_dist_intersection_vertexes(
-            du.convert_tooth_surface_to_angle(CONST.MESIAL, self.model.is_buccal_side, self.model.tooth_position),
-            self.pt_at_crv_ref, self.cnl_ref_major_outline)
+            self.mesial_ref = self.determine_dist_intersection_vertexes(
+                du.convert_tooth_surface_to_angle(CONST.MESIAL, self.model.is_buccal_side, self.model.tooth_position),
+                self.pt_at_crv_ref, self.cnl_ref_major_outline)
 
-        self.distal_ref = self.determine_dist_intersection_vertexes(
-            du.convert_tooth_surface_to_angle(CONST.DISTAL, self.model.is_buccal_side, self.model.tooth_position),
-            self.pt_at_crv_ref, self.cnl_ref_major_outline)
+            self.distal_ref = self.determine_dist_intersection_vertexes(
+                du.convert_tooth_surface_to_angle(CONST.DISTAL, self.model.is_buccal_side, self.model.tooth_position),
+                self.pt_at_crv_ref, self.cnl_ref_major_outline)
 
         for k, pt_at_crv_cmp in self.pt_at_crvs_cmp.items() or {}:
             if pt_at_crv_cmp:
@@ -681,10 +683,10 @@ class SectionData(object):
         """
 
         # mindist_ref should be ==> ? (sd.pst_mindist.p_body - sd.pt_cnl_pre_cwt).length()
-
-        self.mindist_ref = self.determine_min_dist_info(
-            self.bdy_major_outline, self.cnl_ref_major_outline,
-            self.pt_at_crv_ref, self.major_axis_vector, self.major_axis_t_vector)
+        if self.cnl_ref_major_outline_exist:
+            self.mindist_ref = self.determine_min_dist_info(
+                self.bdy_major_outline, self.cnl_ref_major_outline,
+                self.pt_at_crv_ref, self.major_axis_vector, self.major_axis_t_vector)
 
         for k, pt_at_crv_cmp in self.pt_at_crvs_cmp.items() or {}:
             if pt_at_crv_cmp:
@@ -730,10 +732,10 @@ class SectionData(object):
         sd.area_cnl_ref
         sd.area_cnls_cmp
         """
-
-        self.area_cnl_ref = outline_area(self.pt_at_crv_ref,
-                                         self.t_vector_at_crv_ref,
-                                         self.cnl_ref_major_outline)  # poly_area(vs_canal_pre_major)
+        if self.cnl_ref_major_outline_exist:
+            self.area_cnl_ref = outline_area(self.pt_at_crv_ref,
+                                             self.t_vector_at_crv_ref,
+                                             self.cnl_ref_major_outline)  # poly_area(vs_canal_pre_major)
 
         for k, pt_at_crv_cmp in self.pt_at_crvs_cmp.items() or {}:
             if pt_at_crv_cmp:

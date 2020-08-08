@@ -215,16 +215,18 @@ def _update_seed_segment(left_segment, left_side_indices, right_segment, right_s
     return seed_segment
 
 
-def ordered_outlines_from_contour_points(contour_points):
+def ordered_outlines_from_contour_points(contour_points, closing_distance_limit=10000):
     """
     :param contour_points: contour points with neighbors and normal vactor
         [[point, leaf1, leaf2, normal1, normal2],...]
+    :param closing_distance_limit:
     :return:
         list of sorted segments
 
     처음에는 right direction, 끝나면 left_direction으로 진행
     첫번째 점은 left와 right 다 있음
     """
+
 
     # print(contour_points)
     close_segment = True
@@ -269,7 +271,11 @@ def ordered_outlines_from_contour_points(contour_points):
                 closing_dist = seed_segment[0][0].distance(seed_segment[-1][0])
                 nearest_points = [[seed_segment[-1][0].distance(x[0]), i] for i, x in enumerate(contour_points)]
                 nearest_points.sort(key=lambda x: x[0])
-                if closing_dist > nearest_points[0][0]:  # 강제 연결
+
+                '''
+                강제 연결시 문제점: 만일 clsoing diatance가 ##너무## 길면, 모든 점들이 다 연결됨
+                '''
+                if nearest_points[0][0] < closing_dist < closing_distance_limit:  # 강제 연결
                     print(f'  ========CONNECTING LOGICALLY SEPARATED POINTS========= ')
                     # contour_points에서 가장 가까운 점을 뽑아 seed_segment끝에 넣고
                     seed_segment.append(contour_points.pop(nearest_points[0][1]))
@@ -423,31 +429,31 @@ def scattered_section_contour_from_facets(p, t, facets, normals, magnification_r
     return contours_with_neighbors
 
 
-def test_segment(intersect_contour_points_with_neighbors):
-    segments = ordered_outlines_from_contour_points(intersect_contour_points_with_neighbors)
-    import model3d
-    bounding_box_range = [(0, 60), (30, 120), (0, 200)]
-    model3d.init(bounding_box_range)
-    for seg in segments:
-        model3d.plot_points(seg)
-    for seg in segments:
-        if len(seg) > 5:
-            pass
-            # chart3d.plot_marker(seg[0][:1], ['b'])
-            # chart3d.plot_marker(seg[1][:1], ['m'])
-            # chart3d.plot_marker(seg[2][:1], ['y'])
-            # chart3d.plot_marker(seg[-2][:1], ['r'])
-            # chart3d.plot_marker(seg[-1][:1], ['g'])
-
-    model3d.show()
+# def test_segment(intersect_contour_points_with_neighbors):
+#     segments = ordered_outlines_from_contour_points(intersect_contour_points_with_neighbors)
+#     import model3d
+#     bounding_box_range = [(0, 60), (30, 120), (0, 200)]
+#     model3d.init(bounding_box_range)
+#     for seg in segments:
+#         model3d.plot_points(seg)
+#     for seg in segments:
+#         if len(seg) > 5:
+#             pass
+#             # chart3d.plot_marker(seg[0][:1], ['b'])
+#             # chart3d.plot_marker(seg[1][:1], ['m'])
+#             # chart3d.plot_marker(seg[2][:1], ['y'])
+#             # chart3d.plot_marker(seg[-2][:1], ['r'])
+#             # chart3d.plot_marker(seg[-1][:1], ['g'])
+#
+#     model3d.show()
 
 
 def test2():
-    points = []
+    from tmp_points import contours_with_neighbors as points
 
     p = [[vector(y[0]), vector(y[1]), vector(y[2]), y[3], y[4]] for y in points]
 
-    segments = ordered_outlines_from_contour_points(p)
+    segments = ordered_outlines_from_contour_points(p, closing_distance_limit=3.5)
 
     import model3d
     bounding_box_range = [(0, 60), (30, 120), (0, 200)]

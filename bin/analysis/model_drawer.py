@@ -366,7 +366,7 @@ def model3d_drawer(cfg, model_data, axes_visible=True):
             if cfg.crossing_points:
                 draw_crossing_point_of_canal_axes(model3d, cfg, colors, model_header, section)
 
-            if cfg.centroids:
+            if cfg.centroids and 'pt_cnl_ref_centroid' in section:
                 draw_canal_centroids(model3d, colors, section)
 
             if cfg.root_outlines:
