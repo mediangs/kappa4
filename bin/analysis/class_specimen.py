@@ -82,6 +82,9 @@ class Specimen:
         self.bounding_box = None
         self.weine_classification = None
         self.magnification_ratio = 1
+        self.central_fossa = None
+        self.chamber_roof = None
+        self.long_axis = None
 
     def get_default_path(self, directory, suffix):
         '''

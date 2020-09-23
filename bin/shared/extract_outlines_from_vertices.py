@@ -44,7 +44,8 @@ def section_outlines_from_vertices(point, normal_vector, facets, normals, is_can
         print('empty points')
         return [[]], [], False
 
-    segments = ordered_outlines_from_contour_points(contours_with_neighbors, closing_distance_limit=3.5*magnification_ratio)
+    segments = ordered_outlines_from_contour_points(contours_with_neighbors,
+                                                    closing_distance_limit=3.5 * magnification_ratio)
     segments = sorted(segments, key=lambda x: -len(x))
     major_segment = find_major_segment(point, deepcopy(segments))
 

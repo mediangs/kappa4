@@ -3,13 +3,10 @@ from __future__ import division
 '''
 NOTE init() and show() are expected to be called only once
 '''
-
 # draw a vector
-
 from matplotlib.patches import FancyArrowPatch
 from mpl_toolkits.mplot3d import proj3d
 import numpy as np
-import streamlit as st
 
 
 class Arrow3D(FancyArrowPatch):
@@ -100,6 +97,11 @@ def init(lim, grid=False):
         ax.zaxis._axinfo["grid"]['color'] = (1, 1, 1, 0)
 
 
+def text3d(text, P, color='k'):
+    x, y, z = P
+    ax.text(x, y, z, text, size=15, zorder=1, color=color)
+
+
 def plot_arrow(p1, p2, **kwargs):
     '''
     P: a  point (x, y, z)
@@ -160,6 +162,18 @@ def plot_points(P, marker=None, markersize=4, label=None, linewidth=1.0, ):  # o
     else:
         ax.plot(X, Y, Z, label=label)
 
+def plot_circle(center, radius, color='r', fill=False):
+
+    #plt.plot(x, y, '.')
+    circle = plt.Circle(center, radius, color='r', fill=False)
+    plt.gca().add_artist(circle)
+
+    # plt.title('Found center at ({:.2f}, {:.2f})\n'
+    #           '{}% radius is {:.2f}\n'
+    #           '{} / {} points within circle'.format(
+    #     x0, y0, t, r0, n_within, n))
+    #
+
 
 def plot_surface(X, Y, Z):
     '''
@@ -171,12 +185,12 @@ def plot_surface(X, Y, Z):
 def show():
     ax.legend()
     set_axes_equal(ax)
-    # plt.show()
-    st.header("""
-    # test
-    """)
+    plt.show()
+    # st.header("""
+    # # test
+    # """)
 
     # fig = plt.figure()
     # st.plotly_chart(fig)
 
-    st.pyplot()
+    # st.pyplot()
