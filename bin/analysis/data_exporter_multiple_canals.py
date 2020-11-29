@@ -69,12 +69,13 @@ def index_to_excel_column_string(n):
     return string
 
 
-def get_tooth_info(md):
+def get_tooth_info(md, short=False):
     ratio = 1 if not 'magnification_ratio' in md.keys() else 1 / md['magnification_ratio']
     tooth_info = ',' if md['crv_name'] is None else md['crv_name'] + ', length: %.2f' % (md['crv_ref_length'] * ratio)
-    tooth_info += ',,CURVE,%2f,FURCATION,%2f' % (md['length'], md['furcation_pos'])
-    tooth_info += ',straight length from apex to orifice,%2f' % ((vector(md['apical_end_of_CH']).distance(vector(md['coronal_end_of_CH']))) * ratio)
-    # tooth_info += '' if md.specimen.note is None else ',,, NOTE: ' + md.specimen.note
+    if not short:
+        tooth_info += ',,CURVE,%2f,FURCATION,%2f' % (md['length'], md['furcation_pos'])
+        tooth_info += ',straight length from apex to orifice,%2f' % ((vector(md['apical_end_of_CH']).distance(vector(md['coronal_end_of_CH']))) * ratio)
+        # tooth_info += '' if md.specimen.note is None else ',,, NOTE: ' + md.specimen.note
     return tooth_info
 
 
@@ -95,7 +96,7 @@ def model_data_export_to_excel_sheet(model_data, column_definition,
     #Get name of comparison canals
     cmp_canals = None if not 'pts_of_crvs_cmp' in model_header else model_header['pts_of_crvs_cmp'].keys()
 
-    tooth_info = get_tooth_info(model_header)
+    tooth_info = get_tooth_info(model_header, short=True)
     columns = column_definition(cmp_canals, magnification_ratio)
     column_header = ','.join(columns.names)
     rows = datatable_from_modeldata(model_data, columns)

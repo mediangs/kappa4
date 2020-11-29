@@ -5,10 +5,10 @@ sys.path.insert(2, './bin/shared')
 
 import streamlit_helper as sh
 import canal_and_body_shape as cbs
-from tooth_model_info import get_dataset_info
+from st_chart_anatomy_data import get_dataset_info
 
 
-def main():
+def app():
     import model_drawer as cd
     from multicolor_curvature_plot import curvature_colormap_fig
     from SessionState import SessionState
@@ -95,4 +95,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    app()

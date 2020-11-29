@@ -264,6 +264,7 @@ def export_landmarks_relation(specimens):
 
 def draw_landmarks_relation(specimens, orifice_origin, orifice_on_xaxis, grid=True):
     import model3d_matplot as model3d
+    draw_central_fossa = False
 
     coordinates = landmarks_coords_collector(specimens)
 
@@ -305,33 +306,43 @@ def draw_landmarks_relation(specimens, orifice_origin, orifice_on_xaxis, grid=Tr
     # r0, n_within = radius_of_circle_contain_points(np.array(mean_db), r_dbs, 80)
     # model3d.plot_circle(mean_mb, r0, color='r', fill=False)
 
+
     plot_orifices_boundary(model3d, [mean_mb, mean_db, mean_p, mean_mb2], 'r-')
     plot_orifices_boundary(model3d, [mean_mb, mean_db, mean_p], 'b-')
-    model3d.plot_points([mean_cross, mean_central_fossa], 'r-')
-    model3d.plot_points([mean_cross], 'rX', markersize=8)
-    model3d.plot_points([mean_central_fossa], 'mX', markersize=8)
-
     mertics = landmarks_measurement(mean_mb, mean_db, mean_p, mean_mb2, mean_cross)
 
-    model3d.text3d(f'MB({mertics["dmp_angle"]:.1f}`)', mean_mb)
-    #model3d.text3d(f'MB({mertics["pmm2_angle"]:.1f}` / {mertics["dmp_angle"]:.1f}`)', mean_mb)
-    model3d.text3d(f'DB({mertics["mdp_angle"]:.1f}`)', mean_db)
-    model3d.text3d(f'P({mertics["mpd_angle"]:.1f}`)', mean_p)
-    model3d.text3d(f'MB2({mertics["mp_m2_dist"]:.2f}mm)', mean_mb2)
+    draw_orifice_point_only = True
+    if draw_orifice_point_only:
+        model3d.text3d(f'MB', mean_mb)
+        model3d.text3d(f'DB', mean_db)
+        model3d.text3d(f'P', mean_p)
+        model3d.text3d(f'MB2', mean_mb2)
+    else:
+        model3d.text3d(f'MB({mertics["dmp_angle"]:.1f}`)', mean_mb)
+        #model3d.text3d(f'MB({mertics["pmm2_angle"]:.1f}` / {mertics["dmp_angle"]:.1f}`)', mean_mb)
+        model3d.text3d(f'DB({mertics["mdp_angle"]:.1f}`)', mean_db)
+        model3d.text3d(f'P({mertics["mpd_angle"]:.1f}`)', mean_p)
+        model3d.text3d(f'MB2({mertics["mp_m2_dist"]:.2f}mm)', mean_mb2)
+
 
     model3d.text3d(f'{mertics["mp_length"]:.1f}mm', np.array([mean_mb, mean_p]).mean(axis=0))
     model3d.text3d(f'{mertics["dp_length"]:.1f}mm', np.array([mean_db, mean_p]).mean(axis=0))
     model3d.text3d(f'{mertics["md_length"]:.1f}mm', np.array([mean_mb, mean_db]).mean(axis=0))
     model3d.text3d(f'{mertics["mm2_length"]:.1f}mm', np.array([mean_mb, mean_mb2]).mean(axis=0))
-    model3d.text3d(f'{(vector(mean_cross) - vector(mean_central_fossa)).length():.1f}mm', np.array([mean_cross, mean_central_fossa]).mean(axis=0))
 
-    # mean_cross point와 mb, db, p의 관계
-    model3d.text3d(f'{mertics["cm_length"]:.1f}mm', np.array([mean_mb, mean_cross]).mean(axis=0), 'r')
-    model3d.text3d(f'{mertics["cd_length"]:.1f}mm', np.array([mean_db, mean_cross]).mean(axis=0), 'r')
-    model3d.text3d(f'{mertics["cp_length"]:.1f}mm', np.array([mean_p, mean_cross]).mean(axis=0), 'r')
-    model3d.plot_points([mean_cross, mean_mb], 'r:')
-    model3d.plot_points([mean_cross, mean_db], 'r:')
-    model3d.plot_points([mean_cross, mean_p], 'r:')
+    if draw_central_fossa:
+        model3d.plot_points([mean_cross, mean_central_fossa], 'r-')
+        model3d.plot_points([mean_cross], 'rX', markersize=8)
+        model3d.plot_points([mean_central_fossa], 'mX', markersize=8)
+        model3d.text3d(f'{(vector(mean_cross) - vector(mean_central_fossa)).length():.1f}mm', np.array([mean_cross, mean_central_fossa]).mean(axis=0))
+
+        # mean_cross point와 mb, db, p의 관계
+        model3d.text3d(f'{mertics["cm_length"]:.1f}mm', np.array([mean_mb, mean_cross]).mean(axis=0), 'r')
+        model3d.text3d(f'{mertics["cd_length"]:.1f}mm', np.array([mean_db, mean_cross]).mean(axis=0), 'r')
+        model3d.text3d(f'{mertics["cp_length"]:.1f}mm', np.array([mean_p, mean_cross]).mean(axis=0), 'r')
+        model3d.plot_points([mean_cross, mean_mb], 'r:')
+        model3d.plot_points([mean_cross, mean_db], 'r:')
+        model3d.plot_points([mean_cross, mean_p], 'r:')
 
     model3d.show()
 

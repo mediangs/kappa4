@@ -19,15 +19,6 @@ def column_definition_multicanal_small(cmp_canals, ratio):
     column_keys.extend('mesial_concavity!0 distal_concavity!0'.split())
     conversions.extend([1/ratio, 1/ratio])
 
-    # FileMovement(vector angle distance)
-    column_names.extend([f'Transportation-{x}' for x in cmp_canals])
-    column_keys.extend([f'cnls_transportation!{x}!2' for x in cmp_canals])
-    conversions.extend([1/ratio for x in cmp_canals])
-
-    column_names.extend([f'TranspAngle-{x}' for x in cmp_canals])
-    column_keys.extend([f'cnls_transportation!{x}!1' for x in cmp_canals])
-    conversions.extend([1 for x in cmp_canals])
-
     # DentinThickness(p_body, p_canal, thickness, angle)
     column_names.append('MinDist-Pre')
     column_keys.append('mindist_ref!2')
@@ -53,10 +44,6 @@ def column_definition_multicanal_small(cmp_canals, ratio):
     column_names.extend([f'IOD-{x}' for x in cmp_canals])
     column_keys.extend([f'cwt_ratios!{x}' for x in cmp_canals])
     conversions.extend([1 for x in cmp_canals])
-
-    column_names.append('Roundness')
-    column_keys.append('-')
-    conversions.append(1)
 
     assert (len(column_names) == len(column_keys))
     assert (len(conversions) == len(column_keys))
