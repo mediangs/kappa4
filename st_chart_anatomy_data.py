@@ -35,6 +35,7 @@ def pretty_filename(name):
 def config_chart_parameters():
     from class_parameter import DrawOptionParameters
     param = DrawOptionParameters()
+    param.use_matplot = False
     param.legend = True
     param.legend_width = True  # display canal width and area info
     param.root_outlines = True

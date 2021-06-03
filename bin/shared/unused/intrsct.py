@@ -6,7 +6,7 @@ import numpy as np
 from shapely.geometry import Polygon
 
 from point_data import *
-from rotate import rotation_matrix_with_axis_and_degree
+from helpers_rotate import rotation_matrix_with_axis_and_degree
 
 EPSILON = 1e-7
 

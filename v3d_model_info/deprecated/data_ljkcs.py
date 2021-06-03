@@ -5,7 +5,7 @@ Created on 2014. 3. 28.
 @author: jongki
 '''
 from __future__ import division
-import dist_util as du       # collection of utility function
+import helpers_contours as du       # collection of utility function
 import const as CON          # constant       
 
 roots = []

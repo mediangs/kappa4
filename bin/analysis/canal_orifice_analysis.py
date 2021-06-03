@@ -1,10 +1,11 @@
 from functools import reduce
-import excel_helper
-import rotate as ro
+import helpers_excel
+import helpers_geom
+import helpers_rotate as ro
 import numpy as np
-import dist_util as du
+import helpers_contours as du
 from constant import CONST
-from geom import vector
+from vector_class import vector
 
 
 def normal_vector_of_canal_orifices_plane(orifice_points):
@@ -13,7 +14,7 @@ def normal_vector_of_canal_orifices_plane(orifice_points):
     MB, DB, P = np.array(orifice_points[CONST.MB]), np.array(orifice_points[CONST.DB]), np.array(orifice_points[CONST.P])
 
     # the cross product is a vector normal to the plane
-    return du.unit_vector(np.cross(DB - MB, P - MB))
+    return helpers_geom.unit_vector(np.cross(DB - MB, P - MB))
 
 
 def tooth_laterality(orifice_points): # left or right
@@ -52,9 +53,9 @@ def landmarks_transform_into_XY_plane(projecting_points, orifices, orifice_origi
 
     # 2D rotation
     # assume calculate angle on XY plane
-    r_angle = du.angle_between(np.dot(r_ps[orifice_on_xaxis], np.array([[1.0, 0.0, 0.0],
-                                                                        [0.0, 1.0, 0.0],
-                                                                        [0.0, 0.0, 0.0]])), [1.0, 0.0, 0.0])
+    r_angle = helpers_geom.radian_between_vectors(np.dot(r_ps[orifice_on_xaxis], np.array([[1.0, 0.0, 0.0],
+                                                                                           [0.0, 1.0, 0.0],
+                                                                                           [0.0, 0.0, 0.0]])), [1.0, 0.0, 0.0])
 
     X_COORD, Y_COORD = 0, 1
     r_angle = 2 * np.pi - r_angle if r_orifices[orifice_on_xaxis][Y_COORD] < 0 else r_angle
@@ -119,16 +120,16 @@ def landmarks_measurement(mb, db, p, mb2, crossing):
     mp_length = (p - mb).length()
     dp_length = (p - db).length()
     md_length = (db - mb).length()
-    dmp_angle = (db - mb).angle_between(p - mb)
-    mdp_angle = (mb - db).angle_between(p - db)
-    mpd_angle = (mb - p).angle_between(db - p)
+    dmp_angle = helpers_geom.radian_between_vectors(p - mb)
+    mdp_angle = helpers_geom.radian_between_vectors(p - db)
+    mpd_angle = helpers_geom.radian_between_vectors(db - p)
     measurements = {'mp_length': mp_length, 'dp_length': dp_length, 'md_length': md_length,
                     'dmp_angle': dmp_angle, 'mdp_angle': mdp_angle, 'mpd_angle': mpd_angle}
 
     if mb2:
         mm2_length = (mb - mb2).length()
         m2p_length = (mb2 - p).length()
-        pmm2_angle = 0.0 if mm2_length ==0 else (p - mb).angle_between(mb2 - mb)
+        pmm2_angle = 0.0 if mm2_length ==0 else helpers_geom.radian_between_vectors(mb2 - mb)
         mp_m2_dist = distance_btn_line_and_point(mb, p, mb2)
         measurements.update({'mm2_length': mm2_length, 'm2p_length': m2p_length,
                              'mp_m2_dist': mp_m2_dist, 'pmm2_angle': pmm2_angle})
@@ -154,8 +155,8 @@ def landmarks_coord_transformation(coords, orifice_origin, orifice_on_xaxis):
     r_long_axis = r_merged[-2:].tolist()
     r_central_fossa = r_merged[-3:-2][0].tolist()
 
-    r_crossing = du.intersection_point_of_plane_and_line(vector([0, 0, 0]), vector([0, 0, 1]), vector(r_central_fossa),
-                                                         vector(r_long_axis[1]) - vector(r_long_axis[0]))
+    r_crossing = helpers_geom.intersection_point_of_plane_and_line(vector([0, 0, 0]), vector([0, 0, 1]), vector(r_central_fossa),
+                                                                   vector(r_long_axis[1]) - vector(r_long_axis[0]))
 
     return r_orifices, r_crossing, r_central_fossa, r_long_axis
 
@@ -175,7 +176,7 @@ def export_landmarks_measurement(orifices, excel_workbook=None):
     if excel_workbook:
         worksheet = excel_workbook.Sheets.Add()
         # Fill column header
-        excel_helper.fill_a_row_to_sheet(worksheet, column_header, 1)
+        helpers_excel.fill_a_row_to_sheet(worksheet, column_header, 1)
 
     cur_row_of_sheet = 2
 
@@ -198,7 +199,7 @@ def export_landmarks_measurement(orifices, excel_workbook=None):
         row_data = reduce(lambda x, y: x + ',' + y, result.values())
         print(row_data)
         if excel_workbook:
-            excel_helper.fill_a_row_to_sheet(worksheet, row_data, cur_row_of_sheet)
+            helpers_excel.fill_a_row_to_sheet(worksheet, row_data, cur_row_of_sheet)
         cur_row_of_sheet += 1
 
 

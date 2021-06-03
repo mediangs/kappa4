@@ -45,6 +45,7 @@ def config_chart_parameters():
     from class_parameter import DrawOptionParameters
     param = DrawOptionParameters()
     param.legend = True
+    param.use_matplot = False
     param.legend_width = True  # display canal width and area info
     param.root_outlines = True
     param.canal_outlines = True

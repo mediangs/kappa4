@@ -16,7 +16,7 @@
 # 10 Translate nearest back to the start/end line. 
 # Malcolm Kesson 16 Dec 2012
 
-from geom import vector
+from vector_class import vector
 
 
 def point2line(point_on_contour, start, end, tangent_vector):

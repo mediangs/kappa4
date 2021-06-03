@@ -186,7 +186,7 @@ def test_linear_square():
 def test_my_ellipse():
 
     import point_data as p
-    from rotate import get_rotated_points
+    from helpers_rotate import get_rotated_points
     
     #data_3d = get_rotated_points(p.c, p.n, p.P0)
     #data = (data_3d[:,:2]).astype(np.float32) # data type should be float32 or int32

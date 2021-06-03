@@ -5,10 +5,10 @@ from collections import OrderedDict
 import win32com.client as win32  # Excel export
 from functools import reduce
 
-import dist_util as du  # collection of utility function
-import excel_helper
+import helpers_contours as du  # collection of utility function
+import helpers_excel
 from constant import CONST
-from geom import vector
+from vector_class import vector
 
 
 def draw_chart(sheet, num_rows):
@@ -31,9 +31,9 @@ def draw_chart(sheet, num_rows):
     s_gc_pre.Format.Line.Weight = CH_LINE_THICKNESS
     s_lc_pre.Format.Line.Weight = CH_LINE_THICKNESS
     s_lt_pre.Format.Line.Weight = CH_LINE_THICKNESS
-    s_gc_pre.Format.Line.ForeColor.RGB = excel_helper.rgb_to_hex((23, 173, 166))
-    s_lc_pre.Format.Line.ForeColor.RGB = excel_helper.rgb_to_hex((152, 24, 146))
-    s_lt_pre.Format.Line.ForeColor.RGB = excel_helper.rgb_to_hex((178, 18, 18))
+    s_gc_pre.Format.Line.ForeColor.RGB = helpers_excel.rgb_to_hex((23, 173, 166))
+    s_lc_pre.Format.Line.ForeColor.RGB = helpers_excel.rgb_to_hex((152, 24, 146))
+    s_lt_pre.Format.Line.ForeColor.RGB = helpers_excel.rgb_to_hex((178, 18, 18))
 
     ch1.ApplyLayout(4)
     ch1.Axes(CONST.xlValue, CONST.xlSecondary).MinimumScale = -20
@@ -68,11 +68,11 @@ def draw_chart(sheet, num_rows):
     s_lateral.Format.Line.Weight = CH_LINE_THICKNESS
     s_canal.Format.Line.Weight = CH_LINE_THICKNESS
 
-    s_min.Format.Line.ForeColor.RGB = excel_helper.rgb_to_hex((0, 0, 0))
-    s_mesial.Format.Line.ForeColor.RGB = excel_helper.rgb_to_hex((106, 175, 5))
-    s_distal.Format.Line.ForeColor.RGB = excel_helper.rgb_to_hex((152, 24, 146))
-    s_lateral.Format.Line.ForeColor.RGB = excel_helper.rgb_to_hex((23, 173, 166))
-    s_canal.Format.Line.ForeColor.RGB = excel_helper.rgb_to_hex((255, 13, 13))
+    s_min.Format.Line.ForeColor.RGB = helpers_excel.rgb_to_hex((0, 0, 0))
+    s_mesial.Format.Line.ForeColor.RGB = helpers_excel.rgb_to_hex((106, 175, 5))
+    s_distal.Format.Line.ForeColor.RGB = helpers_excel.rgb_to_hex((152, 24, 146))
+    s_lateral.Format.Line.ForeColor.RGB = helpers_excel.rgb_to_hex((23, 173, 166))
+    s_canal.Format.Line.ForeColor.RGB = helpers_excel.rgb_to_hex((255, 13, 13))
 
     ###########################
     # Direction chart
@@ -98,8 +98,8 @@ def draw_chart(sheet, num_rows):
     s_angle_min.Format.Line.Weight = CH_LINE_THICKNESS
     s_angle_gc.Format.Line.Weight = CH_LINE_THICKNESS
 
-    s_angle_min.Format.Line.ForeColor.RGB = excel_helper.rgb_to_hex((178, 18, 18))
-    s_angle_gc.Format.Line.ForeColor.RGB = excel_helper.rgb_to_hex((246, 88, 107))
+    s_angle_min.Format.Line.ForeColor.RGB = helpers_excel.rgb_to_hex((178, 18, 18))
+    s_angle_gc.Format.Line.ForeColor.RGB = helpers_excel.rgb_to_hex((246, 88, 107))
 
     '''
     s_angle.ChartType = CONST.xlXYScatter
@@ -117,22 +117,22 @@ def summary_table(sheet, curve_len, interval):
     num_sets = 1 / interval
 
     row_data = 'GC max from coronal,,GC precentile,,GC max value'
-    excel_helper.fill_a_row_to_sheet(sheet, row_data, 1, 8)
+    helpers_excel.fill_a_row_to_sheet(sheet, row_data, 1, 8)
     # expression for GC max from coronal
     row_data = '=B%d - CELL("contents",INDEX(B%d:B%d,MATCH(MAX(C%d:C%d),C%d:C%d,0)))' % (
     DATA_START_ROW + num_rows, DATA_START_ROW, DATA_START_ROW + num_rows, DATA_START_ROW, DATA_START_ROW + num_rows,
     DATA_START_ROW, DATA_START_ROW + num_rows)
-    excel_helper.fill_a_cell_to_sheet(sheet, row_data, 1, 9)
+    helpers_excel.fill_a_cell_to_sheet(sheet, row_data, 1, 9)
 
     # expression for GC percentile
     row_data = '=I1/B%d * 100' % (DATA_START_ROW + num_rows)
-    excel_helper.fill_a_row_to_sheet(sheet, row_data, 1, 11)
+    helpers_excel.fill_a_row_to_sheet(sheet, row_data, 1, 11)
 
     row_data = '=MAX(C%d:C%d)' % (DATA_START_ROW, DATA_START_ROW + num_rows)
-    excel_helper.fill_a_row_to_sheet(sheet, row_data, 1, 13)
+    helpers_excel.fill_a_row_to_sheet(sheet, row_data, 1, 13)
 
     row_data = ',Min. dist.,Mesial,Distal,Lateral, Min. dia. canal'
-    excel_helper.fill_a_row_to_sheet(sheet, row_data, BASE_ROW, BASE_COL);
+    helpers_excel.fill_a_row_to_sheet(sheet, row_data, BASE_ROW, BASE_COL);
     BASE_ROW += 1
     for i in range(int(num_rows / num_sets) + 1):
         row_data = '%.1f,' % ((i * 2 + 1) / 2.0)
@@ -147,7 +147,7 @@ def summary_table(sheet, curve_len, interval):
         row_data += '=AVERAGE(J%d:J%d)' % (
         int(i * num_sets + DATA_START_ROW), int((i + 1) * num_sets + DATA_START_ROW - 1))
 
-        excel_helper.fill_a_row_to_sheet(sheet, row_data, BASE_ROW, BASE_COL);
+        helpers_excel.fill_a_row_to_sheet(sheet, row_data, BASE_ROW, BASE_COL);
         BASE_ROW += 1
 
 
@@ -281,12 +281,12 @@ def export_overall_stat(model_data, pst=None, excel_workbook=None):
         if md['crv_name']:
             worksheet.Name = md['crv_name']
         # Fill column header
-        excel_helper.fill_a_row_to_sheet(worksheet, tooth_info, 1)
-        excel_helper.fill_a_row_to_sheet(worksheet, column_header, 2)
+        helpers_excel.fill_a_row_to_sheet(worksheet, tooth_info, 1)
+        helpers_excel.fill_a_row_to_sheet(worksheet, column_header, 2)
         cur_row_of_sheet = 3
 
         for r in rows:
-            excel_helper.fill_a_row_to_sheet(worksheet, r, cur_row_of_sheet)
+            helpers_excel.fill_a_row_to_sheet(worksheet, r, cur_row_of_sheet)
             cur_row_of_sheet += 1
 
         draw_chart(worksheet, len(section_data))
@@ -319,7 +319,7 @@ def export_overall_stat_to_single_sheet(data_directory):
     wb = xl.Workbooks.Add()
     worksheet = wb.Sheets.Add()
     worksheet.Name = 'all data'
-    excel_helper.fill_a_row_to_sheet(worksheet, get_column_header(), 1)
+    helpers_excel.fill_a_row_to_sheet(worksheet, get_column_header(), 1)
     cur_row_of_sheet = 2
 
     for (path, dir, files) in os.walk(data_directory):
@@ -330,7 +330,7 @@ def export_overall_stat_to_single_sheet(data_directory):
                 print('  Exporting [{}] ...'.format(filename))
 
                 for r in rows:
-                    excel_helper.fill_a_row_to_sheet(worksheet, r, cur_row_of_sheet)
+                    helpers_excel.fill_a_row_to_sheet(worksheet, r, cur_row_of_sheet)
                     cur_row_of_sheet += 1
 
 def main():

@@ -5,14 +5,15 @@ Created on 2015. 7. 13.
 
 @author: jongki
 """
-import concavity_analysis
-import dist_util as du  # collection of utility function
+import analysis_concavity
+import helpers_contours as du  # collection of utility function
 import extract_outlines_from_vertices as eo
-from shape_analysis import outline_area, outline_centroid
+import helpers_geom
+from analysis_shape import outline_area, outline_centroid
 from constant import CONST
-from geom import vector  # vector calculation
+from vector_class import vector  # vector calculation
 from named_tuples import DentinThickness, FileMovement
-from rotate import get_rotated_points
+from helpers_rotate import get_rotated_points
 
 
 class SectionData(object):
@@ -295,15 +296,15 @@ class SectionData(object):
             self.fixed_long_axis_vector)  # point and tangent
 
         for k, crv_cmp in self.model.crvs_cmp.items() or {}:
-            pt_at_crv_cmp, u2 = du.intersection_point_of_plane_and_curve(self.pt_at_crv_ref,
-                                                                         self.t_vector_at_crv_ref, crv_cmp)
+            pt_at_crv_cmp, u2 = helpers_geom.intersection_point_of_plane_and_curve(self.pt_at_crv_ref,
+                                                                                   self.t_vector_at_crv_ref, crv_cmp)
             self.pt_at_crvs_cmp.update({k: pt_at_crv_cmp})
             self.crvs_cmp_length_ratio.update({k: None if not pt_at_crv_cmp else crv_cmp.parameter_to_length(u2)})
 
         if self.model.crv_opp_ref:
-            self.pt_at_crv_opp_ref, _ = du.intersection_point_of_plane_and_curve(self.pt_at_crv_ref,
-                                                                                 self.t_vector_at_crv_ref,
-                                                                                 self.model.crv_opp_ref)
+            self.pt_at_crv_opp_ref, _ = helpers_geom.intersection_point_of_plane_and_curve(self.pt_at_crv_ref,
+                                                                                           self.t_vector_at_crv_ref,
+                                                                                           self.model.crv_opp_ref)
 
         if not self.pt_at_crv_opp_ref or (
                 self.pt_at_crv_opp_ref - self.pt_at_crv_ref).length() < self.MIN_DIST_BTN_AXIS * self.model.magnification_ratio:
@@ -355,22 +356,22 @@ class SectionData(object):
         # ===============================================================================
 
         for k, crv_cmp in self.model.crvs_cmp.items() or {}:
-            CH_pt_at_crv_cmp, _ = du.intersection_point_of_plane_and_curve(
+            CH_pt_at_crv_cmp, _ = helpers_geom.intersection_point_of_plane_and_curve(
                 self.pt_at_crv_ref, self.model.CH_axis_vector, crv_cmp)
             self.CH_pt_at_crvs_cmp.update({k: CH_pt_at_crv_cmp})
 
             # t1 와 직교하는 점, 평면상에서
-            tangential_CH_pt_at_crv_cmp, _ = du.intersection_point_of_plane_and_curve(
+            tangential_CH_pt_at_crv_cmp, _ = helpers_geom.intersection_point_of_plane_and_curve(
                 self.pt_at_crv_ref, self.major_axis_t_vector, crv_cmp)
             self.tangential_CH_pt_at_crvs_cmp.update({k: tangential_CH_pt_at_crv_cmp})
 
         # gc_axis_vector와 직교하는 점
-        self.CH_pt_at_CH_axis = du.intersection_point_of_plane_and_line(
+        self.CH_pt_at_CH_axis = helpers_geom.intersection_point_of_plane_and_line(
             self.pt_at_crv_ref, self.model.CH_axis_vector,
             self.model.apical_end_of_CH, self.model.CH_axis_vector)
 
         # t1 와 직교하는 점
-        self.tangential_CH_pt_at_CH_axis = du.intersection_point_of_plane_and_line(
+        self.tangential_CH_pt_at_CH_axis = helpers_geom.intersection_point_of_plane_and_line(
             self.pt_at_crv_ref, self.major_axis_t_vector,
             self.model.apical_end_of_CH, self.model.CH_axis_vector)
 
@@ -384,12 +385,12 @@ class SectionData(object):
             is_canal=False, magnification_ratio=self.model.magnification_ratio)
 
     def set_concavity_info(self):
-        is_distal = concavity_analysis.is_distal_concavity(self.model.is_buccal_side, self.model.tooth_position)
+        is_distal = analysis_concavity.is_distal_concavity(self.model.is_buccal_side, self.model.tooth_position)
 
-        self.mesial_concavity = concavity_analysis.concavity_analysis(self.bdy_major_outline, self.pt_at_crv_ref,
+        self.mesial_concavity = analysis_concavity.concavity_analysis(self.bdy_major_outline, self.pt_at_crv_ref,
                                                                       self.pt_at_crv_opp_ref, self.t_vector_at_crv_ref,
                                                                       self.model.magnification_ratio, not is_distal)
-        self.distal_concavity = concavity_analysis.concavity_analysis(self.bdy_major_outline, self.pt_at_crv_ref,
+        self.distal_concavity = analysis_concavity.concavity_analysis(self.bdy_major_outline, self.pt_at_crv_ref,
                                                                       self.pt_at_crv_opp_ref, self.t_vector_at_crv_ref,
                                                                       self.model.magnification_ratio, is_distal)
 
@@ -496,7 +497,7 @@ class SectionData(object):
             transportation_vector = None if not (pt_ref and pt_cmp) else pt_cmp - pt_ref
             #transportation_vector = self.lenth_of_vector(pt_cmp, pt_ref)
             transportation_angle = None if not transportation_vector else du.normalize_angle(
-                du.angle_btn_vectors(self.major_axis_vector, transportation_vector, self.major_axis_t_vector),
+                helpers_geom.degree_between_vectors(self.major_axis_vector, transportation_vector, self.major_axis_t_vector),
                 self.model.is_buccal_side, self.model.specimen.tooth_position)
 
             transportation.update(
@@ -516,7 +517,7 @@ class SectionData(object):
                                         ) else self.tangential_CH_pt_at_CH_axis - self.pt_at_crv_ref
 
         straightening_angle = None if not (
-            straightening_vector) else du.normalize_angle(du.angle_btn_vectors(
+            straightening_vector) else du.normalize_angle(helpers_geom.degree_between_vectors(
             self.major_axis_vector, straightening_vector, self.major_axis_t_vector),
             self.model.is_buccal_side, self.model.specimen.tooth_position)
 
@@ -529,7 +530,7 @@ class SectionData(object):
                  ).length() == 0) else self.tangential_CH_pt_at_CH_axis - tangential_CH_pt_at_crv_cmp
 
             straightened_angle = None if not straightened_vector else du.normalize_angle(
-                du.angle_btn_vectors(self.major_axis_vector, straightened_vector, self.major_axis_t_vector),
+                helpers_geom.degree_between_vectors(self.major_axis_vector, straightened_vector, self.major_axis_t_vector),
                 self.model.is_buccal_side, self.model.specimen.tooth_position)
 
             self.cnls_straightened.update(

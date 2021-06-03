@@ -7,7 +7,7 @@ Created on 2015. 5. 16.
 
 from __future__ import division
 
-import dist_util as du  # collection of utility function
+import helpers_contours as du  # collection of utility function
 from constant import CONST
 from specimens.class_specimen import Specimen
 

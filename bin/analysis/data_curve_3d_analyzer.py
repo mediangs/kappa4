@@ -9,9 +9,9 @@ from functools import reduce
 import json
 import os
 
-import dist_util as du  # collection of utility function
-import excel_helper
-from geom import vector
+import helpers_contours as du  # collection of utility function
+import helpers_excel
+from vector_class import vector
 import numpy
 
 
@@ -31,14 +31,14 @@ def export_curve_3d_stat_to_excel(data_directory):
     worksheet.Name = 'curve_analysis'
 
     column_header = ','.join(results[0].keys())
-    excel_helper.fill_a_row_to_sheet(worksheet, column_header, 1)
+    helpers_excel.fill_a_row_to_sheet(worksheet, column_header, 1)
 
     current_row = 2
     print(column_header)
     for e in results:
         v = reduce(lambda x, y: x + ',' + y, e.values())
         print (v)
-        excel_helper.fill_a_row_to_sheet(worksheet, v, current_row)
+        helpers_excel.fill_a_row_to_sheet(worksheet, v, current_row)
         current_row += 1
 
 

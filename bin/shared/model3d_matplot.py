@@ -175,12 +175,34 @@ def plot_circle(center, radius, color='r', fill=False):
     #
 
 
+def plot_mesh_surface(point, normal, bound_box, color='w', alpha=0.4):
+    """
+    :param point: a point on the plane
+    :param normal: normal of the plane
+    :param bound_box:
+    :param color:
+    :param alpha:
+    :return:
+    """
+
+
+    (a, b, c), (x0, y0, z0), (xl, yl, _) = normal, point, bound_box
+    X, Y = np.arange(xl[0] + 1, xl[1], 1), np.arange(yl[0] + 1, yl[1], 1)
+    X, Y = np.meshgrid(X, Y)
+    Z = (-a * (X - x0) - b * (Y - y0)) / c + z0
+    ax.plot_surface(X, Y, Z, color=color, rstride=1, cstride=1, linewidth=0, alpha=alpha, antialiased=False)
+
+
 def plot_surface(X, Y, Z):
     '''
     NOTE X, Y, Z should be meshgrid. Easiest way is to use numpy.
     '''
-    ax.plot_surface(X, Y, Z, color='w', rstride=1, cstride=1, linewidth=0, antialiased=False)
+    ax.plot_surface(X, Y, Z, color='w', rstride=1, cstride=1, linewidth=0, alpha=0.4, antialiased=False)
 
+
+def model3d_drawer_fig(axes_visible=True):
+    show()
+    return plt
 
 def show():
     ax.legend()

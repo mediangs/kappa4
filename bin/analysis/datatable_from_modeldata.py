@@ -62,7 +62,7 @@ def _keyvalue(sd, key, ratio):
 def datatable_from_modeldata(model_data, col_def):
 
     import pandas as pd
-    from shape_analysis import outline_roundness
+    from analysis_shape import outline_roundness
 
     echo = False
 

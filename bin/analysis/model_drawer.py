@@ -10,10 +10,11 @@ from __future__ import division
 
 import numpy as np
 
-import dist_util as du
+import helpers_contours as du
+import helpers_geom
 from extract_outlines_from_vertices import sort_and_segment_vertices
 from constant import CONST
-from geom import vector
+from vector_class import vector
 
 
 def draw_pre_and_post_canal_axis(model3d, cfg, colors, model_header):
@@ -103,8 +104,8 @@ def draw_pre_canal_outlines(model3d, cfg, colors, section, magnification_ratio):
 
         # 평면(section plane)에 상태측 curve의 교점이 있다면
         if section['pt_at_crv_opp_ref']:
-            if section['cnl_opp_ref_major_outline'] and not du.is_line_inside_outline(section['pt_at_crv_ref'],
-                                                                                      section['pt_at_crv_opp_ref'],
+            if section['cnl_opp_ref_major_outline'] and not helpers_geom.is_line_inside_outline(section['pt_at_crv_ref'],
+                                                                                                section['pt_at_crv_opp_ref'],
                                                                                       section['cnl_opp_ref_major_outline'][:]):
                 model3d.plot_points_detail(section['cnl_opp_ref_major_outline'], colors.canal_outline_pre)
 
@@ -113,12 +114,12 @@ def draw_pre_canal_outlines(model3d, cfg, colors, section, magnification_ratio):
         # pre major 근관을  표시
         label = '' if not (cfg.legend and cfg.legend_width) else 'Canal area, width: %.2fmm^2, %.2fmm' % (
             section['area_cnl_ref'], section['cnl_ref_narrow'][CONST.CD_WIDTH])
-        model3d.plot_points_detail(section['cnl_ref_major_outline'], colors.pre_canal_outline, label=label)
+        model3d.plot_points_detail(section['cnl_ref_major_outline'], colors.canal_outline_pre, label=label)
 
         # 평면(section plane)에 상태측 curve의 교점이 있다면
         if section['pt_at_crv_opp_ref']:
-            if section['cnl_opp_ref_major_outline'] and not du.is_line_inside_outline(section['pt_at_crv_ref'],
-                                                                                      section['pt_at_crv_opp_ref'],
+            if section['cnl_opp_ref_major_outline'] and not helpers_geom.is_line_inside_outline(section['pt_at_crv_ref'],
+                                                                                                section['pt_at_crv_opp_ref'],
                                                                                       section['cnl_opp_ref_major_outline'][:]):
                 model3d.plot_points_detail(section['cnl_opp_ref_major_outline'], colors.canal_outline_pre)
 
@@ -343,6 +344,11 @@ def model3d_drawer(cfg, model_data, axes_visible=True):
     '''
 
     # prepare chart
+    # if cfg.use_matplot:
+    #     import model3d_matplot as model3d
+    # else:
+    #     import model3d
+
     import model3d
     from class_parameter import ModelColorParameters
     import math
@@ -424,9 +430,6 @@ def model3d_drawer(cfg, model_data, axes_visible=True):
     if len(cfg.centroids_onsite) > 0:
         model3d.plot_marker(cfg.centroids_onsite, ['magenta', 'o', 3])
 
-    # show chart
-    # print(" Finish drawing! ")
-    # chart3d.show()
     return model3d.model3d_drawer_fig(axes_visible)
 
 

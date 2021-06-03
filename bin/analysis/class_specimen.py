@@ -6,7 +6,7 @@ Created on 2014. 4. 3.
 '''
 
 from nerve_path import Nerve_path
-import dist_util as du
+import helpers_contours as du
 
 
 class Canal:

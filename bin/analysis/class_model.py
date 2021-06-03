@@ -6,10 +6,11 @@ Created on 2016. 10. 23.
 @author: jongki
 """
 
-import dist_util as du  # collection of utility function
+import helpers_contours as du  # collection of utility function
+import helpers_geom
 import v3d
 from constant import CONST
-from geom import vector  # vector calculation
+from vector_class import vector  # vector calculation
 
 
 class ModelData(object):
@@ -77,24 +78,24 @@ class ModelData(object):
     @property
     def pts_of_crv_ref(self):
         # pre_crv를 점들의 배열로 만든것 (100 개의 점이 기본값임)
-        return du.curve_to_points(self.crv_ref)
+        return helpers_geom.curve_to_points(self.crv_ref)
 
     @property
     def pts_of_crvs_cmp(self):
         if bool(self.crvs_cmp):
             pts = {}
             for k, v in self.crvs_cmp.items():
-                pts.update({k: du.curve_to_points(v)})
+                pts.update({k: helpers_geom.curve_to_points(v)})
             return pts
         else:
             return None
 
     def pts_of_crv(self, crv):
-        return du.curve_to_points(crv)
+        return helpers_geom.curve_to_points(crv)
 
     @property
     def pts_of_crv_opp_ref(self):
-        return du.curve_to_points(self.crv_opp_ref)
+        return helpers_geom.curve_to_points(self.crv_opp_ref)
 
     @property
     def median_major_axis_vector(self):
@@ -104,7 +105,7 @@ class ModelData(object):
         """
         std_axis_u = 0.5  # 근관의 중간 값을 사용
         p1, t1 = vector(self.crv_ref.get_pos(std_axis_u)), vector(self.crv_ref.get_diff1(std_axis_u))
-        aux_p1, _ = du.intersection_point_of_plane_and_curve(p1, t1, self.crv_opp_ref)
+        aux_p1, _ = helpers_geom.intersection_point_of_plane_and_curve(p1, t1, self.crv_opp_ref)
         return aux_p1 - p1
 
     def dump_curve_pts(self):

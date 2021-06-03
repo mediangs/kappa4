@@ -11,7 +11,7 @@ Data from LK01 ~ 80 12-01-01 ~ 12-08-21
 
 from __future__ import division
 
-import dist_util as du  # collection of utility function
+import helpers_contours as du  # collection of utility function
 from specimens.class_specimen import Specimen
 
 roots = []

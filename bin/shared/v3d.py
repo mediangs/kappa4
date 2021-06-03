@@ -1,6 +1,6 @@
 from __future__ import division
 from array import array
-from geom import vector
+from vector_class import vector
 
 
 def read(path):

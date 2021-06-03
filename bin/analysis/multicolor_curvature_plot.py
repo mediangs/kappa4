@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 import os
 import json
-from geom import vector
+from vector_class import vector
 import gc
 
 

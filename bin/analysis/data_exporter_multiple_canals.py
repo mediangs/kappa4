@@ -6,9 +6,9 @@ import win32com.client as win32  # Excel export
 import json
 import os
 
-import excel_helper
+import helpers_excel
 from datatable_from_modeldata import datatable_from_modeldata
-from geom import vector
+from vector_class import vector
 
 
 def get_indices_of_subheadings(headings, subheadings):
@@ -116,13 +116,13 @@ def model_data_export_to_excel_sheet(model_data, column_definition,
 
         worksheet.Name = name
         # Fill column header
-        excel_helper.fill_a_row_to_sheet(worksheet, tooth_info, 1)
-        excel_helper.fill_a_row_to_sheet(worksheet, column_header, 2)
+        helpers_excel.fill_a_row_to_sheet(worksheet, tooth_info, 1)
+        helpers_excel.fill_a_row_to_sheet(worksheet, column_header, 2)
         cur_row_of_sheet = 3
 
         for index, row in rows.iterrows():
             r = reduce(lambda x, y: x + ',' + y, row)
-            excel_helper.fill_a_row_to_sheet(worksheet, r, cur_row_of_sheet)
+            helpers_excel.fill_a_row_to_sheet(worksheet, r, cur_row_of_sheet)
             cur_row_of_sheet += 1
 
         if charts_on_sheet:
@@ -198,7 +198,7 @@ def export_multiple_specimens_to_single_excel_sheet(data_directory, column_defin
                     cmp_canals = model_header['pts_of_crvs_cmp'].keys()
                     columns = column_definition(cmp_canals, magnification_ratio)
                     column_header = ','.join(columns.names)
-                    excel_helper.fill_a_row_to_sheet(worksheet, column_header, 1)
+                    helpers_excel.fill_a_row_to_sheet(worksheet, column_header, 1)
                     cur_row_of_sheet = 2
                     is_first_file = False
 
@@ -208,7 +208,7 @@ def export_multiple_specimens_to_single_excel_sheet(data_directory, column_defin
 
                 for index, row in rows.iterrows():
                     r = reduce(lambda x, y: x + ',' + y, row)
-                    excel_helper.fill_a_row_to_sheet(worksheet, r, cur_row_of_sheet)
+                    helpers_excel.fill_a_row_to_sheet(worksheet, r, cur_row_of_sheet)
                     cur_row_of_sheet += 1
 
 

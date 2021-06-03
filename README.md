@@ -33,17 +33,19 @@ last updated 2018.07.16
 4. results : 분석결과를 출력하는 directory
           
     
-    
-
 ### Kappa2 install (python 3.8.2)
 activate py38
+pip install pandas
 conda install shapely
 pip install numpy-stl
 conda install -c anaconda pywin32
-conda install -c conda-forge opencv
-
-
-
+pip install streamlit
+pip install plotly
+pip install matplotlib
+pip install openpyxy
+pip install pyvista
+--conda install -c conda-forge opencv
+    
 
 ### Kappa2 installation ###
 

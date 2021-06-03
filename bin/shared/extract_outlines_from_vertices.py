@@ -1,9 +1,9 @@
 import numpy as np
 from copy import deepcopy
 
-from dist_util import is_two_line_segments_intersect_in_XY_plane
-from extract_intersect_points_from_model import scattered_section_contour_from_facets, ordered_outlines_from_contour_points
-from geom import vector
+from helpers_geom import is_two_line_segments_intersect_in_XY_plane
+from extract_aligned_points_from_outlines import scattered_section_contour_from_facets, ordered_outlines_from_contour_points
+from vector_class import vector
 
 INFINITE_VALUE = 10000.0
 

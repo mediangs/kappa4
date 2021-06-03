@@ -11,9 +11,9 @@ mandibular incisors
 # -*- coding: cp949 -*-
 
 from __future__ import division
-import dist_util as du       # collection of utility function
+import helpers_contours as du       # collection of utility function
 import const as CON          # constant   
-from geom import vector    
+from vector_class import vector
 
 roots = []
 bounding_box_range = [(-10, 20), (-10, 20), (-10, 20)]

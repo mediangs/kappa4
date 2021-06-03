@@ -11,7 +11,7 @@ data from jongki(Mx6)
 
 from __future__ import division
 
-import dist_util as du  # collection of utility function
+import helpers_contours as du  # collection of utility function
 from constant import CONST
 from specimens.class_specimen import Specimen
 

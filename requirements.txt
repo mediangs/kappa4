@@ -1,0 +1,4 @@
+shapely
+numpy-stl
+pywin32
+streamlit

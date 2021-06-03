@@ -3,8 +3,8 @@ import streamlit as st
 sys.path.insert(1, './bin/analysis')
 sys.path.insert(2, './bin/shared')
 
-import streamlit_helper as sh
-import canal_and_body_shape as cbs
+import helpers_streamlit as sh
+import endo_file as cbs
 from st_chart_g20_shaping_data import get_dataset_info
 # from tooth_model_info import get_dataset_info
 

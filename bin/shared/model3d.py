@@ -123,7 +123,7 @@ def plot_surface(X, Y, Z):
     '''
     NOTE X, Y, Z should be meshgrid. Easiest way is to use numpy.
     '''
-    ax.plot_surface(X, Y, Z, color ='w', rstride=1, cstride=1, linewidth=0, antialiased=False)
+    ax.plot_surface(X, Y, Z, color ='w', rstride=1, cstride=1, linewidth=0, alpha=0.5, antialiased=False)
 
 
 def update_layout(axes_visible=True):
